@@ -1,0 +1,16 @@
+---
+- name: Check status of module existence within the eshop
+  stat: "path={{ eshop_path.modules }}/oxps/modulegenerator"
+  register: module_generator_check
+
+- name: Remove temporary oxid module skeleton generator
+  file: path=/tmp/oxid_module_generator state=absent
+  when: not module_generator_check.stat.exists
+
+- name: Clone out module skeleton generator
+  git: "repo={{ eshop.sdk.module_skeleton_generator.repo }} dest=/tmp/oxid_module_generator"
+  when: not module_generator_check.stat.exists
+
+- name: Copy module skeleton generator to eShop
+  shell: "cp -rf /tmp/oxid_module_generator/copy_this/modules/oxps {{ eshop_path.modules }}/"
+  when: not module_generator_check.stat.exists

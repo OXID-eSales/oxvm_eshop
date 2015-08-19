@@ -1,0 +1,2 @@
+---
+# Override any variable from 'ansible/vars/oxideshop.yml' and 'base_vm/ansible/vars/default.yml'

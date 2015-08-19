@@ -1,0 +1,6 @@
+---
+eshop:
+  validation_path: "{{ eshop_path.source }}/oxseo.php"
+  config:
+    path: "{{ eshop_path.source }}/config.inc.php"
+    path_deploy: "{{ eshop_path.source }}/config.inc.php.deploy"

@@ -1,0 +1,36 @@
+---
+- name: Check for configuration file
+  stat: "path={{ eshop.config.path }}"
+  register: check_eshop_config
+
+- name: Check for deploy configuration file
+  stat: "path={{ eshop.config.path_deploy }}"
+  register: check_eshop_config_deploy
+
+- name: Copy deploy configuration file
+  shell: "cp {{ eshop.config.path_deploy }} {{ eshop.config.path }}"
+  when: not check_eshop_config.stat.exists and check_eshop_config_deploy.stat.exists
+
+- name: Update configuration value
+  replace: >
+    dest={{ eshop.config.path }}
+    regexp="{{ item.pattern }}"
+    replace="{{ item.value }}"
+    owner={{ apache.user }}
+    group={{ apache.group }}
+    mode=0664
+  with_items:
+    - {'pattern': '<dbHost_.e>', 'value': "localhost"}
+    - {'pattern': '<dbName_.e>', 'value': "{{ mysql.database }}"}
+    - {'pattern': '<dbUser_.e>', 'value': "{{ mysql.user }}"}
+    - {'pattern': '<dbPwd_.e>', 'value': "{{ mysql.password }}"}
+    - {'pattern': '<sShopURL_.e>', 'value': "http://{{ apache.servername }}"}
+    - {'pattern': '<sShopDir_.e>', 'value': "{{ eshop_path.source }}"}
+    - {'pattern': '<sCompileDir_.e>', 'value': "{{ eshop_path.source }}/tmp"}
+    - {'pattern': '<iUtfMode>', 'value': "{{ eshop.config.utf_mode }}"}
+
+- name: Ensure temporary directory exists
+  file: "path={{ eshop_path.source }}/tmp state=directory"
+
+- name: Reset shop
+  shell: "{{ eshop_path.source }}/vendor/bin/reset-shop"

@@ -1,0 +1,3 @@
+[submodule "base_vm"]
+	path = base_vm
+	url = https://github.com/OXID-eSales/oxvm_base.git

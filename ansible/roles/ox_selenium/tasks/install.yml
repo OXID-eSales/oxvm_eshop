@@ -1,0 +1,43 @@
+---
+  - name: Install firefox to get all dependencies
+    sudo: yes
+    apt: name=firefox state=present
+
+  - name: Download fixed firefox version
+    shell: "wget -O /tmp/firefox.deb {{ selenium.package.firefox.deb_url }} creates=/tmp/firefox.deb"
+
+  - name: Install fixed firefox version
+    sudo: yes
+    shell: "dpkg -i /tmp/firefox.deb && apt-get install -f -y"
+
+  - name: Install dependencies needed for selenium
+    sudo: yes
+    apt: "name={{ item }} state=present"
+    with_items:
+      - xfce4
+      - xvfb
+      - x11vnc
+      - openjdk-7-jre-headless
+
+  - name: Prepare placeholder for selenium
+    sudo: yes
+    file: path=/opt/selenium state=directory
+
+  - name: Download fixed selenium version
+    sudo: yes
+    shell: "wget -O /opt/selenium/selenium.jar {{ selenium.package.self.jar_url }} creates=/opt/selenium/selenium.jar"
+
+  - name: Add selenium init script
+    sudo: yes
+    template: src=selenium_init_script dest=/etc/init.d/selenium mode=0755
+
+  - name: Add helper scripts
+    sudo: yes
+    template: "src={{ item }} dest=/opt/selenium/{{ item }} mode=0755"
+    with_items:
+      - 'start_selenium.sh'
+      - 'start_xvfb.sh'
+
+  - name: Start selenium service
+    sudo: yes
+    service: name=selenium state=started enabled=yes

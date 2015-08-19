@@ -1,0 +1,69 @@
+---
+vagrant_local:
+  vm:
+    name: oxideshop
+    hostname: oxideshop.dev
+    aliases:
+      - www.oxideshop.dev
+    app_shared_folder:
+      source: oxideshop
+      target: /var/www/oxideshop
+server:
+  packages:
+    - git
+apache:
+  docroot: "{{ eshop_path.source }}"
+  servername: "{{ vagrant_local.vm.aliases.0 }}"
+mysql:
+  root_password: oxid
+  database: oxid
+  user: oxid
+  password: oxid
+php:
+  packages:
+    - php5-cli
+    - php5-intl
+    - php5-mcrypt
+    - php5-mysql
+    - php5-gd
+    - php5-curl
+varnish:
+  default_config:
+    source: "{{ eshop_path.library }}/ReverseProxy/Varnish/default.vcl"
+    target: /etc/varnish/default.vcl
+  servers_config:
+    source: "{{ eshop_path.library }}/ReverseProxy/Varnish/servers_conf.vcl.varnish_4.dist"
+    target: /etc/varnish/servers_conf.vcl
+selenium:
+  install: false
+  package:
+    firefox:
+      deb_url: http://downloads.sourceforge.net/project/ubuntuzilla/mozilla/apt/pool/main/f/firefox-mozilla-build/firefox-mozilla-build_31.0-0ubuntu1_amd64.deb
+    self:
+      jar_url: http://selenium-release.storage.googleapis.com/2.47/selenium-server-standalone-2.47.1.jar
+eshop_path:
+  root: "{{ eshop_target_path }}"
+  source: "{{ eshop_target_path }}/source"
+  library: "{{ eshop_target_path }}/library"
+  modules: "{{ eshop_target_path }}/source/modules"
+eshop_target_path: "{{ vagrant_local.vm.app_shared_folder.target }}"
+eshop:
+  config:
+    utf_mode: 1
+  composer:
+    clean_vendors: true
+    env: "SHOP_PATH=\"''\" SHOP_TESTS_PATH='../tests' PARTIAL_MODULE_PATHS='null'"
+    root: "{{ eshop_path.source }}"
+    cache_url: ~
+    json_source_url: https://raw.githubusercontent.com/OXID-eSales/oxideshop_ce/b-5.2-ce/source/composer.json
+    lock_source_url: https://raw.githubusercontent.com/OXID-eSales/oxideshop_ce/b-5.2-ce/source/composer.lock
+  source:
+    repo: https://github.com/OXID-eSales/oxideshop_ce.git
+  sdk:
+    path: ~/eshop_sdk
+    module_skeleton_generator:
+      install: true
+      repo: https://github.com/OXID-eSales/module_skeleton_generator.git
+    module_certification_tools:
+      install: true
+      repo: https://github.com/rezonanc-oxid/module_certification_tools.git

@@ -1,0 +1,6 @@
+---
+- include: install.yml
+  when: varnish.install
+
+- include: uninstall.yml
+  when: not varnish.install

@@ -1,0 +1,16 @@
+---
+- hosts: all
+  remote_user: vagrant
+  vars_files:
+    - ../base_vm/ansible/vars/default.yml
+    - vars/oxideshop.yml
+    - [~/.personal_ansible_vm.yml, vars/oxideshop.yml]
+    - [../personal.yml, ~/.personal_ansible_vm.yml, vars/oxideshop.yml]
+  roles:
+    - common
+    - ox_varnish
+    - ox_selenium
+    - ox_eshop
+    - ox_eshop-sdk
+    - ox_eshop-sdk-certification_tools
+    - ox_eshop-sdk-skeleton_generator

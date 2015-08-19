@@ -1,0 +1,21 @@
+---
+- name: Clean vendors
+  file: "path={{ eshop.composer.root }}/vendor state=absent"
+  when: eshop.composer.clean_vendors
+
+- name: Download composer cache
+  shell: "wget -O /tmp/composer_cache.tar.gz {{ eshop.composer.cache_url }} creates=/tmp/composer_cache.tar.gz"
+  when: eshop.composer.cache_url
+
+- name: Extract composer cache
+  shell: tar zxf /tmp/composer_cache.tar.gz -C ~/.composer/
+  when: eshop.composer.cache_url
+
+- name: Create composer json file
+  shell: "wget -O {{ eshop.composer.root }}/composer.json {{ eshop.composer.json_source_url }} creates={{ eshop.composer.root }}/composer.json"
+
+- name: Create composer lock file
+  shell: "wget -O {{ eshop.composer.root }}/composer.lock {{ eshop.composer.lock_source_url }} creates={{ eshop.composer.root }}/composer.lock"
+
+- name: Run composer install
+  shell: "cd {{ eshop.composer.root }} && {{ eshop.composer.env }} composer install"

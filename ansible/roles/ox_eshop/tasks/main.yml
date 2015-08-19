@@ -1,0 +1,4 @@
+---
+- include: ensure_eshop_source.yml
+- include: handle_composer.yml
+- include: config_inc_update.yml

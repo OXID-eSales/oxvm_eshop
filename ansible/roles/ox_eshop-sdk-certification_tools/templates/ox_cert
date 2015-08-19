@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ]; then
+  echo "Please provide path to module which you would like to certify. The path must be relative to eshop's module path (e.g. mycompanyvendor/mymodulename)."
+  exit 1
+fi
+
+cd {{ eshop.sdk.path }}/module_certification_tools/
+MODULEPATH="{{ eshop_path.modules }}/$1" ./run.sh

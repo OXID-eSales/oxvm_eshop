@@ -1,0 +1,26 @@
+---
+- name: Make temporary copy of Varnish servers configuration
+  local_copy: src={{ varnish.servers_config.source }} dest=/tmp/ox_servers.vcl
+  changed_when: False
+
+- name: Ensure Probe host is present
+  replace: >
+    dest=/tmp/ox_servers.vcl
+    regexp='<my_shop_hostname>'
+    replace="127.0.0.1"
+
+- name: Resolve IP address
+  shell: "getent hosts {{ vagrant_local.vm.aliases.0 }} | awk '{ print $1 }'"
+  changed_when: False
+  register: eshop_ip_cmd
+
+- name: Ensure Invalidate host is present
+  replace: >
+    dest=/tmp/ox_servers.vcl
+    regexp='<my_shop_IP>'
+    replace="{{ eshop_ip_cmd.stdout }}"
+
+- name: Update Varnish configuration servers list
+  sudo: yes
+  local_copy: src=/tmp/ox_servers.vcl dest={{ varnish.servers_config.target }}
+  notify: validate existing default varnish configuration

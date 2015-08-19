@@ -1,0 +1,14 @@
+# OS
+.DS_Store/
+
+# Vagrant
+.vagrant/
+
+# Python
+*.py[cod]
+
+# Ansible
+personal.yml
+
+# Application specific
+oxideshop/

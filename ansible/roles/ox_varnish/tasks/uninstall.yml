@@ -1,0 +1,4 @@
+---
+- name: Remove Varnish configuration servers list
+  sudo: yes
+  file: path={{ varnish.servers_config.target }} state=absent

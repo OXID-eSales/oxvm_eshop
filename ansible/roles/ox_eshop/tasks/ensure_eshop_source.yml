@@ -1,0 +1,13 @@
+---
+- name: Check for eshop source
+  stat: "path={{ eshop.validation_path }}"
+  register: eshop_source
+
+- name: Clone out eshop repository
+  sudo: yes
+  git: repo={{ eshop.source.repo }} dest=/opt/oe
+  when: not eshop_source.stat.exists
+
+- name: Transfer eshop clone to shared folder
+  shell: rsync -ra /opt/oe/. {{ eshop_target_path }}
+  when: not eshop_source.stat.exists

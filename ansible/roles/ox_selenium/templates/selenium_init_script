@@ -1,0 +1,52 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          selenium
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: selenium
+# Description:       selenium server with xvfb, x11vnc and xfce4 session
+### END INIT INFO
+
+XVFB=/opt/selenium/start_xvfb.sh
+case "$1" in
+  start)
+    echo -n "Starting: xvfb, xfce4-session, x11vnc, selenium"
+
+    pid=`ps x -o "%c" | \grep start_xvfb.sh`
+
+    if [[ ! -n $pid ]]
+    then
+      start-stop-daemon --start --quiet --background --exec $XVFB
+      echo "."
+    else
+      echo ". already started!"
+    fi
+
+    ;;
+  stop)
+    echo -n "Stopping: xvfb, xfce4-session, x11vnc, selenium"
+
+    pid=`ps x -o "%p %c" | \grep start_xvfb.sh | awk '{ print $1; }'`
+
+    if [[ -n $pid ]]
+    then
+      pgid=`ps x -o "%p %r" | \grep $pid | awk '{ print $2; }'`
+      kill -TERM -- -$pgid
+      echo "."
+    else
+      echo ". Process not started yet!"
+    fi
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo "Usage: /etc/init.d/selenium {start|stop|restart}"
+    exit 1
+esac
+
+exit 0
