@@ -263,6 +263,15 @@ used to run Selenium tests with the help of
   This should also be reflected in ``config.inc.php`` file as ``sShopURL``
   parameter, e.g. http://www.oxideshop.dev:6081/ .
 
+Troubleshooting
+---------------
+Some possible VM running troubles and how to get rid of them is described in this chapter.
+
+Vagrant up or provision process stops on one of composer tasks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In case if composer is trying to get repositories from github too often, the github may ask for token, but no messages will be shown in case of "vagrant up" or "vagrant provision". How to get and configure github token is described in `Define github token for composer <#define-github-token-for-composer>`_ chapter.
+
 SDK
 ===
 
