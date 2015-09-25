@@ -122,6 +122,20 @@ A list of available and tested providers [#list_of_providers]_:
     vm:
       provider: lxc
 
+Set eShop to UTF mode
+^^^^^^^^^^^^^^^^^^^^^
+
+By default shop will be installed with utf mode disabled. Its possible to turn on utf mode on first installation by changing corresponding config variable:
+
+.. code:: yaml
+
+  ---
+  eshop:
+    config:
+      utf_mode: 1
+
+If vm is already running and shop installed, please edit config.inc.php directly.
+
 Use eShop package instead of repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

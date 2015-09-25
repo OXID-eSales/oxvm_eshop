@@ -49,7 +49,7 @@ eshop_path:
 eshop_target_path: "{{ vagrant_local.vm.app_shared_folder.target }}"
 eshop:
   config:
-    utf_mode: 1
+    utf_mode: 0
   composer:
     clean_vendors: true
     env: "SHOP_PATH=\"''\" SHOP_TESTS_PATH='../tests' PARTIAL_MODULE_PATHS='null'"
