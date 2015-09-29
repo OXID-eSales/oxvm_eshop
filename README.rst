@@ -263,15 +263,6 @@ used to run Selenium tests with the help of
   This should also be reflected in ``config.inc.php`` file as ``sShopURL``
   parameter, e.g. http://www.oxideshop.dev:6081/ .
 
-Troubleshooting
----------------
-Some possible VM running troubles and how to get rid of them is described in this chapter.
-
-Vagrant up or provision process stops on one of composer tasks
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In case if composer is trying to get repositories from github too often, the github may ask for token, but no messages will be shown in case of "vagrant up" or "vagrant provision". How to get and configure github token is described in `Define github token for composer <#define-github-token-for-composer>`_ chapter.
-
 SDK
 ===
 
@@ -365,3 +356,23 @@ https://github.com/OXID-eSales/testing_library
 
 .. [#cert_tools_call] The tools can be invoked from any working directory as
   long as the ``ox_cert`` shortcut is being used.
+
+Troubleshooting
+---------------
+
+Provision process hangs on "Run composer install" task
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+During the provision process (*which could be invoked implicitly by
+``vagrant up`` or explicitly by ``vagrant provision``*) a task ``Run composer
+install`` might hang (*waiting for time-out*) because github access API limit
+has been reached and ``composer`` is asking for github account username/password
+which could resolve the API limit. ``Ansible`` will not provide this information
+to ``STDOUT`` or ``STDERR`` so it will look like the task just hanged.
+
+Since there are no options to provide username/password for this particular task
+one could just use a github API token which will allow to overcome the API
+access limit.
+
+How to create and configure a github token is described in
+`Define github token for composer <#define-github-token-for-composer>`_ chapter.
