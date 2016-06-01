@@ -479,8 +479,7 @@ through the help of `composer <https://getcomposer.org/>`_, because it's defined
 in ``composer.json`` as development requirement inside eShop (at least in CE
 latest development version).
 
-All binary tools are installed inside ``/var/www/oxideshop/source/vendor/bin/``
-(this value may be changed through ``eshop_path.source`` key in configuration).
+All binary tools are installed inside ``/var/www/oxideshop/vendor/bin/``.
 
 A list of available binary tools:
 
